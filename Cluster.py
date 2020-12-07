@@ -2,8 +2,8 @@ import random
 import matplotlib.pyplot as plt
 import math
 
-REDI = 10
-GENERATE = 60
+REDI = 3
+GENERATE = 50
 class Home:
     def __init__(self,x,y,xy,id):
         self.id = id
@@ -16,28 +16,12 @@ class Home:
     def __str__(self):
         return f'[{self.x},{self.y}]'
 def Clusterize(lst):
-    index = 0
-    while(index!=(len(lst)-1)):
-        head = lst[index]
-        head.connected.append(head)
-        for x in lst:
-            if(x!=head):
-                dist = getDist(head,x)
-                if(dist<REDI):
-                    head.connected.append(x)
-        index += 1
-    headcount = 0
-    
-    lst.sort(key=lambda x: len(x.connected))
-    
-    head = lst[len(lst)-1]  
-    print(f'selected : {len(head.connected)}')          
-   #plt.plot([a.x for a in head.connected],[a.y for a in head.connected],'bo-')
-    figure , axes = plt.subplots()
-    per = plt.Circle((head.x,head.y),REDI,fill=False)
-    axes.set_aspect(1)
-    axes.add_artist(per)
-    return head.connected
+     head = lst[0]
+     for x in lst:
+         if(x!=head):
+             gap = getDist(head,x)
+             if(gap<REDI):
+                 head.
 
 
 
@@ -77,9 +61,9 @@ def getXY():
 
 
 lst = getXY()
-head = Clusterize(lst)
+
 plt.plot(lst[0].x,lst[0].y,'bo')
 plt.plot([a.x for a in lst],[a.y for a in lst],'ro')
-plt.plot([a.x for a in head],[a.y for a in head],'bo-')
+
 plt.show()  
 
