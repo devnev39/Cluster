@@ -15,13 +15,19 @@ class Home:
         
     def __str__(self):
         return f'[{self.x},{self.y}]'
-def Clusterize(lst):
-     head = lst[0]
-     for x in lst:
-         if(x!=head):
-             gap = getDist(head,x)
-             if(gap<REDI):
-                 head.
+
+
+def Clusterize(lst,head):
+    for x in lst:
+        if(x!=head):
+            gap = getDist(head,x)
+            if(gap<REDI):
+                if(x.clustered==False):
+                    head.connected.append(x)
+                    x.clustered = True
+    
+
+
 
 
 
