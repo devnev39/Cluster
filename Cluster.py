@@ -2,8 +2,10 @@ import random
 import matplotlib.pyplot as plt
 import math
 
-REDI = 3
+REDI = 5
 GENERATE = 50
+RNGE = 50
+TopList = []
 class Home:
     def __init__(self,x,y,xy,id):
         self.id = id
@@ -12,23 +14,51 @@ class Home:
         self.xy = xy
         self.clustered = False
         self.connected = []
+        self.parrent = 0
         
     def __str__(self):
         return f'[{self.x},{self.y}]'
 
+    def FindCluster(self,lst):
+        TopList.append(self)
+        lst.remove(self)
+        for each in lst:
+            dist = getDist(each,self)
+            if(dist<=REDI):
+                if(each.clustered==False):
+                    self.connected.append(each)
+                    each.clustered = True
+                    each.parrent = self
+                    TopList.append(each)
 
-def Clusterize(lst,head):
-    for x in lst:
-        if(x!=head):
-            gap = getDist(head,x)
-            if(gap<REDI):
-                if(x.clustered==False):
-                    head.connected.append(x)
-                    x.clustered = True
-    
+        for each in self.connected:
+            each.FindCluster(lst)
 
+    def Show(self):
+        if(self.parrent):
+            plt.plot([self.x,self.parrent.x],[self.y,self.parrent.y],'ro-')
+            if(len(self.connected)):
+                for each in self.connected:
+                    each.Show()
+        else:
+            for each in self.connected:
+                each.Show()                    
+        
+count = 0
+def Clusterize(lst,lstHead,lstPrev):
 
+    for each in lstHead:
+        TopList.append(each)
+        for a in lst:
+            if(a!=each):
+                dist = getDist(each,a)
+                if(dist<=REDI):
+                    each.connected.append(a)
+                    a.clustered = True
+                    lst.remove(a)
+                    TopList.append(a)
 
+            
 
 
 def getDist(h1,h2):
@@ -68,8 +98,14 @@ def getXY():
 
 lst = getXY()
 
-plt.plot(lst[0].x,lst[0].y,'bo')
-plt.plot([a.x for a in lst],[a.y for a in lst],'ro')
+lst_show = lst.copy()
+lst[0].FindCluster(lst)
+print('Found Cluster..')
+plt.plot([a.x for a in lst_show],[a.y for a in lst_show],'go')
+#plt.plot([a.x for a in TopList],[a.y for a in TopList],'ro-')
+for x in TopList:
+    x.Show()
+plt.plot(lst_show[0].x,lst_show[0].y,'bo')
 
 plt.show()  
 
