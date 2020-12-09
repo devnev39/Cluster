@@ -2,10 +2,13 @@ import random
 import matplotlib.pyplot as plt
 import math
 
-REDI = 4
+REDI = 4.00
 GENERATE = 50
 RNGE = 50
 TopList = []
+
+fig,axes = plt.subplots()
+axes.set_aspect(1)
 class Home:
     def __init__(self,x,y,xy,id):
         self.id = id
@@ -27,7 +30,7 @@ class Home:
             lst.remove(self)
             for each in lst:
                 dist = getDist(each,self)
-                if(dist<=REDI):
+                if(dist<=REDI or dist<=(REDI+0.2)):
                     if(each.clustered==False):
                         self.connected.append(each)
                         each.clustered = True
@@ -50,12 +53,16 @@ class Home:
             if(len(self.connected)):
                 for each in self.connected:
                     each.Show()
-            else:
+            
+                
                                     
         else:
-
             for each in self.connected:
-                each.Show()                    
+                each.Show()   
+            if(not len(self.connected)):
+                cir = plt.Circle((self.x,self.y),REDI,fill=False)
+                axes.add_artist(cir)
+
 
 def getDist(h1,h2):
     return math.sqrt((h2.x-h1.x)**2 + (h2.y-h1.y)**2)
