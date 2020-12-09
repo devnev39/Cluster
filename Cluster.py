@@ -2,7 +2,7 @@ import random
 import matplotlib.pyplot as plt
 import math
 
-REDI = 10
+REDI = 10.00
 GENERATE = 60
 class Home:
     def __init__(self,x,y,xy,id):
@@ -23,7 +23,7 @@ def Clusterize(lst):
         for x in lst:
             if(x!=head):
                 dist = getDist(head,x)
-                if(dist<REDI):
+                if(dist<=REDI or dist<=(REDI+0.2)):
                     head.connected.append(x)
         index += 1
     headcount = 0
@@ -80,6 +80,14 @@ lst = getXY()
 head = Clusterize(lst)
 plt.plot(lst[0].x,lst[0].y,'bo')
 plt.plot([a.x for a in lst],[a.y for a in lst],'ro')
-plt.plot([a.x for a in head],[a.y for a in head],'bo-')
+
+prev = head[0]
+for each in head:
+    if(each==prev):
+        plt.plot(prev.x,prev.y,'bo-')
+        continue
+    plt.plot([prev.x,each.x],[prev.y,each.y],'b--')
+    prev = each        
+
 plt.show()  
 
