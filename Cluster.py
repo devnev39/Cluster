@@ -2,7 +2,7 @@ import random
 import matplotlib.pyplot as plt
 import math
 
-REDI = 5
+REDI = 4
 GENERATE = 50
 RNGE = 50
 TopList = []
@@ -20,19 +20,29 @@ class Home:
         return f'[{self.x},{self.y}]'
 
     def FindCluster(self,lst):
-        TopList.append(self)
-        lst.remove(self)
-        for each in lst:
-            dist = getDist(each,self)
-            if(dist<=REDI):
-                if(each.clustered==False):
-                    self.connected.append(each)
-                    each.clustered = True
-                    each.parrent = self
-                    TopList.append(each)
+        if(len(lst)):
+            if(not TopList.count(self)):
+                TopList.append(self)
+            ind = lst.index(self)
+            lst.remove(self)
+            for each in lst:
+                dist = getDist(each,self)
+                if(dist<=REDI):
+                    if(each.clustered==False):
+                        self.connected.append(each)
+                        each.clustered = True
+                        each.parrent = self
+                        TopList.append(each)
 
-        for each in self.connected:
-            each.FindCluster(lst)
+            if(not len(self.connected)):
+                if(len(lst)):
+                    lst[0].FindCluster(lst)
+
+                
+            for each in self.connected:
+                each.FindCluster(lst)
+
+        
 
     def Show(self):
         if(self.parrent):
@@ -40,26 +50,12 @@ class Home:
             if(len(self.connected)):
                 for each in self.connected:
                     each.Show()
+            else:
+                                    
         else:
+
             for each in self.connected:
                 each.Show()                    
-        
-count = 0
-def Clusterize(lst,lstHead,lstPrev):
-
-    for each in lstHead:
-        TopList.append(each)
-        for a in lst:
-            if(a!=each):
-                dist = getDist(each,a)
-                if(dist<=REDI):
-                    each.connected.append(a)
-                    a.clustered = True
-                    lst.remove(a)
-                    TopList.append(a)
-
-            
-
 
 def getDist(h1,h2):
     return math.sqrt((h2.x-h1.x)**2 + (h2.y-h1.y)**2)
@@ -97,7 +93,7 @@ def getXY():
 
 
 lst = getXY()
-
+lst.sort(key=lambda x: math.sqrt((x.x)**2 + (x.y)**2))
 lst_show = lst.copy()
 lst[0].FindCluster(lst)
 print('Found Cluster..')
@@ -106,6 +102,6 @@ plt.plot([a.x for a in lst_show],[a.y for a in lst_show],'go')
 for x in TopList:
     x.Show()
 plt.plot(lst_show[0].x,lst_show[0].y,'bo')
-
+print('completed...')
 plt.show()  
 
