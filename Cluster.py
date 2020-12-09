@@ -1,7 +1,7 @@
 import random
 import matplotlib.pyplot as plt
 import math
-
+import sys
 REDI = 4.00
 GENERATE = 50
 RNGE = 50
@@ -98,17 +98,20 @@ def getXY():
 
     return lstHome
 
-
-lst = getXY()
-lst.sort(key=lambda x: math.sqrt((x.x)**2 + (x.y)**2))
-lst_show = lst.copy()
-lst[0].FindCluster(lst)
-print('Found Cluster..')
-plt.plot([a.x for a in lst_show],[a.y for a in lst_show],'go')
-#plt.plot([a.x for a in TopList],[a.y for a in TopList],'ro-')
-for x in TopList:
-    x.Show()
-plt.plot(lst_show[0].x,lst_show[0].y,'bo')
-print('completed...')
-plt.show()  
+try:
+    lst = getXY()
+    lst.sort(key=lambda x: math.sqrt((x.x)**2 + (x.y)**2))
+    lst_show = lst.copy()
+    lst[0].FindCluster(lst)
+    print('Found Cluster..')
+    plt.plot([a.x for a in lst_show],[a.y for a in lst_show],'go')
+    #plt.plot([a.x for a in TopList],[a.y for a in TopList],'ro-')
+    for x in TopList:
+        x.Show()
+    plt.plot(lst_show[0].x,lst_show[0].y,'bo')
+    print('completed...')
+    plt.show()  
+except Exception as e:
+    a,b,tab = sys.exc_info()
+    print(f'Error : {e} , Line : {tab.tb_lineno}')    
 
